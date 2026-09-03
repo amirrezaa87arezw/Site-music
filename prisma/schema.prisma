@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("ADMIN") // "SUPER" | "ADMIN"
+  createdAt    DateTime @default(now())
+  createdById  String?
+}
+
+model Track {
+  id             String   @id @default(cuid())
+  title          String
+  artist         String   @default("Psycho")
+  coverData      Bytes
+  coverMime      String
+  audioData      Bytes
+  audioMime      String
+  audio128Data   Bytes?
+  audio128Mime   String?
+  releaseDate    DateTime @default(now())
+  order          Int      @default(0)
+  featured       Boolean  @default(false)
+  playCount      Int      @default(0)
+  createdAt      DateTime @default(now())
+  uploadedBy     String?
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  level     String   // "INFO" | "WARN" | "ERROR"
+  message   String
+  meta      String?
+  actor     String?
+  createdAt DateTime @default(now())
+}
